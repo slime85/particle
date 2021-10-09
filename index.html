@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Particle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="particle-list" class="none"></div>
+  <div id="controller" class="none">
+    <p>particle type : <select id="type">
+      <option value="poly" id="poly-option">polygon</option>
+      <option value="arc" id="arc-option">circle</option>
+      <option value="img" id="img-option">image</option>
+    </select></p>
+    <p class="image"><img id="img-select"></p>
+    <p class="polygon">angle : <input type="number" id="polygon"></p>
+    <p class="shape">color : <input type="color" id="color"><input type="text" id="color-text"></p>
+    <input type="checkbox" id="stroke" class="none">
+    <p class="shape">stroke : <label for="stroke"></label></p>
+    <p class="stroke">color : <input type="color" id="stroke-color"><input type="text" id="stroke-color-text"></p>
+    <p class="stroke">width : <span id="stroke-width-range"><span class="lever"></span></span><input type="number" id="stroke-width"></p>
+    <p class="stroke">join : <select id="stroke-join">
+      <option value="miter">miter</option>
+      <option value="round">round</option>
+    </select></p>
+    <p>probability : <span id="ratio-range"><span class="lever"></span></span></span><input type="number" id="ratio"></p>
+    <p>size : <span id="size-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="size-min"><input type="number" id="size-max"></p>
+    <p>speed : <span id="speed-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="speed-min"><input type="number" id="speed-max"></p>
+    <p>rotate : <span id="rotate-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="rotate-min"><input type="number" id="rotate-max"></p>
+    <p>rotate direction : <select id="rotate-direction">
+      <option value="0">random</option>
+      <option value="1">right</option>
+      <option value="-1">left</option>
+    </select></p>
+    <input type="checkbox" id="wave" class="none">
+    <p>wave : <label for="wave"></label></p>
+    <input type="checkbox" id="wave-default" class="none">
+    <p class="wave">defalut : <label for="wave-default"></label></p>
+    <p class="wave-default">radius : <span id="wave-radius-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="wave-radius-min"><input type="number" id="wave-radius-max"></p>
+    <p class="wave-default">speed : <span id="wave-speed-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="wave-speed-min"><input type="number" id="wave-speed-max"></p>
+    <p>alpha : <span id="alpha-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="alpha-min"><input type="number" id="alpha-max"></p>
+    <div id="save">apply</div>
+  </div>
+  <div id="img-list" class="none"></div>
+  <canvas id="preview" class="none"></canvas>
+  <script src="script.js"></script>
+</body>
+</html>
