@@ -11,39 +11,67 @@
   <canvas id="canvas"></canvas>
   <div id="particle-list" class="none"></div>
   <div id="controller" class="none">
-    <p>particle type : <select id="type">
-      <option value="poly" id="poly-option">polygon</option>
-      <option value="arc" id="arc-option">circle</option>
-      <option value="img" id="img-option">image</option>
-    </select></p>
-    <p class="image"><img id="img-select"></p>
-    <p class="polygon">angle : <input type="number" id="polygon"></p>
-    <p class="shape">color : <input type="color" id="color"><input type="text" id="color-text"></p>
-    <input type="checkbox" id="stroke" class="none">
-    <p class="shape">stroke : <label for="stroke"></label></p>
-    <p class="stroke">color : <input type="color" id="stroke-color"><input type="text" id="stroke-color-text"></p>
-    <p class="stroke">width : <span id="stroke-width-range"><span class="lever"></span></span><input type="number" id="stroke-width"></p>
-    <p class="stroke">join : <select id="stroke-join">
-      <option value="miter">miter</option>
-      <option value="round">round</option>
-    </select></p>
-    <p>probability : <span id="ratio-range"><span class="lever"></span></span></span><input type="number" id="ratio"></p>
-    <p>size : <span id="size-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="size-min"><input type="number" id="size-max"></p>
-    <p>speed : <span id="speed-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="speed-min"><input type="number" id="speed-max"></p>
-    <p>rotate : <span id="rotate-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="rotate-min"><input type="number" id="rotate-max"></p>
-    <p>rotate direction : <select id="rotate-direction">
-      <option value="0">random</option>
-      <option value="1">right</option>
-      <option value="-1">left</option>
-    </select></p>
-    <input type="checkbox" id="wave" class="none">
-    <p>wave : <label for="wave"></label></p>
-    <input type="checkbox" id="wave-default" class="none">
-    <p class="wave">defalut : <label for="wave-default"></label></p>
-    <p class="wave-default">radius : <span id="wave-radius-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="wave-radius-min"><input type="number" id="wave-radius-max"></p>
-    <p class="wave-default">speed : <span id="wave-speed-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="wave-speed-min"><input type="number" id="wave-speed-max"></p>
-    <p>alpha : <span id="alpha-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="alpha-min"><input type="number" id="alpha-max"></p>
+    <div id="scroll">
+      <p>particle type : <select id="type">
+        <option value="poly" id="poly-option">polygon</option>
+        <option value="arc" id="arc-option">circle</option>
+        <option value="img" id="img-option">image</option>
+      </select></p>
+      <p class="image"><img id="img-select"></p>
+      <p class="polygon">angle : <input type="number" id="polygon" min="3"></p>
+      <input type="checkbox" id="background" class="none">
+      <p class="shape">background : <label for="background"></label></p>
+      <p class="background">color : <input type="color" id="color"><input type="text" id="color-text"></p>
+      <input type="checkbox" id="stroke" class="none">
+      <p class="shape">stroke : <label for="stroke"></label></p>
+      <p class="stroke">color : <input type="color" id="stroke-color"><input type="text" id="stroke-color-text"></p>
+      <p class="stroke">width : <span id="stroke-width-range"><span class="lever"></span></span><input type="number" id="stroke-width" min="1" max="20"></p>
+      <p class="stroke">join : <select id="stroke-join">
+        <option value="miter">miter</option>
+        <option value="round">round</option>
+      </select></p>
+      <p>probability : <span id="ratio-range"><span class="lever"></span></span></span><input type="number" id="ratio" min="10" max="100" step="10"></p>
+      <p>size : <span id="size-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="size-min" min="0" max="50"><input type="number" id="size-max" min="0" max="50"></p>
+      <p>speed : <span id="speed-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="speed-min" min="0" max="50"><input type="number" id="speed-max" min="0" max="50"></p>
+      <p>rotate : <span id="rotate-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="rotate-min" min="0" max="0.5" step="0.01"><input type="number" id="rotate-max" min="0" max="0.5" step="0.01"></p>
+      <p>rotate direction : <select id="rotate-direction">
+        <option value="0">random</option>
+        <option value="1">right</option>
+        <option value="-1">left</option>
+        <option value="2">none</option>
+      </select></p>
+      <input type="checkbox" id="wave" class="none">
+      <p>wave : <label for="wave"></label></p>
+      <input type="checkbox" id="wave-default" class="none">
+      <p class="wave">defalut : <label for="wave-default"></label></p>
+      <p class="wave-default">radius : <span id="wave-radius-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="wave-radius-min" min="0" max="100"><input type="number" id="wave-radius-max" min="0" max="100"></p>
+      <p class="wave-default">speed : <span id="wave-speed-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="wave-speed-min" min="0" max="0.5" step="0.01"><input type="number" id="wave-speed-max" min="0" max="0.5" step="0.01"></p>
+      <p>alpha : <span id="alpha-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="alpha-min" min="0" max="1" step="0.1"><input type="number" id="alpha-max" min="0" max="1" step="0.1"></p>
+      <p>spawn : <select id="start">
+        <option value="default">default</option>
+        <option value="random">random</option>
+        <option value="center">center</option>
+      </select></p>
+      <p>direction : <select id="direc">
+        <option value="top">top</option>
+        <option value="bottom">bottom</option>
+        <option value="right">right</option>
+        <option value="left">left</option>
+      </select></p>
+      <input type="checkbox" id="tran" class="none">
+      <p>transition : <label for="tran"></label></p>
+      <p class="tran">position : <select id="tran-pos">
+        <option value="all">all</option>
+        <option value="start">start</option>
+        <option value="end">end</option>
+      </select></p>
+      <p class="tran">speed : <span id="tran-speed-range"><span class="lever"></span></span><input type="number" id="tran-speed" min="0" max="0.2" step="0.01"></p>
+      <input type="checkbox" id="life" class="none">
+      <p>life : <label for="life"></label></p>
+      <p class="life">time : <span id="life-range"><span class="lever min-lever"></span><span class="lever max-lever"></span></span><input type="number" id="life-min" min="0" max="20"><input type="number" id="life-max" min="0" max="20"></p>
+    </div>
     <div id="save">apply</div>
+    <div id="delete" class="none">delete</div>
   </div>
   <div id="img-list" class="none"></div>
   <canvas id="preview" class="none"></canvas>

@@ -3,8 +3,11 @@
 
 #canvas{position: absolute; width: 100%; height: 100%;}
 #particle-list{position: absolute; z-index: 10; background: #3338; border: 2px solid #333c; padding: 20px; top: 0; left: 0; display: grid; grid-gap: 20px; grid-template-columns: repeat(5, 1fr); height: 100px; overflow: auto;}
-#particle-list::-webkit-scrollbar{display: none;}
-#controller{position: absolute; z-index: 15; background: #3338; border: 2px solid #333c; padding: 20px; top: 0; right: 0; color: #fff; font-size: 20px; width: 410px; height: 600px;}
+#particle-list::-webkit-scrollbar{width: 7px;}
+#particle-list::-webkit-scrollbar-track{border-radius: 5px; background: #ddd8;}
+#particle-list::-webkit-scrollbar-thumb{border-radius: 5px; background: #fff;}
+#controller{position: absolute; z-index: 15; background: #3338; border: 2px solid #333c; padding: 20px; top: 0; right: 0; color: #fff; font-size: 20px; width: 410px; height: 500px; overflow-y: auto;}
+#preview{position: absolute; width: 100%; height: 100%; z-index: 5; left: 0; top: 0;}
 
 #particle-list canvas{cursor: pointer;}
 
@@ -19,20 +22,36 @@ select{background: none; border: 1px solid #fff; color: #fff; outline: none; hei
 select::-ms-expand{display: none;}
 option{background: #333; border: none;}
 
-.lever{width: 10px; height: 18px; background: #fff; display: block; position: absolute; box-sizing: border-box;}
+.lever{width: 10px; height: 18px; background: #fff; display: block; position: absolute; box-sizing: border-box; border: 2px solid #ddd; cursor: pointer;}
+.lever:hover{background: #eee; border-color: #ccc;}
 
 #save{background: #fff; color: #555; padding: 0 5px 7px; display: inline-block; margin-top: 10px; line-height: 22px; cursor: pointer; border-radius: 4px; position: absolute; left: 20px; bottom: 20px;}
+#delete{background: #fff; color: #555; padding: 0 5px 7px; display: inline-block; margin-top: 10px; line-height: 22px; cursor: pointer; border-radius: 4px; position: absolute; left: 90px; bottom: 20px;}
 
-.polygon, .image, .shape, .wave{margin-left: 15px; display: none;}
-.stroke, .wave-default{margin-left: 30px; display: none;}
+.polygon, .image, .shape, .wave, .tran, .life{margin-left: 15px; display: none;}
+.background, .stroke, .wave-default{margin-left: 30px; display: none;}
 
 label{width: 20px; height: 20px; border: 1px solid #fff; padding: 2px; box-sizing: border-box; display: inline-block; transform: translateY(6px); cursor: pointer;}
 label::before{width: 100%; height: 100%; content: ""; display: block;}
 input[type="checkbox"]:checked+p>label::before{background: #fff;}
 
+#background:checked ~ .background{display: block;}
 #stroke:checked ~ .stroke{display: block;}
 #wave:checked ~ .wave{display: block;}
 #wave:checked ~ .wave-default{display: block;}
 #wave-default:checked ~ .wave-default{display: none;}
+#tran:checked ~ .tran{display: block;}
+#life:checked ~ .life{display: block;}
 
-#img-select{width: 50px; height: 50px;}
+#scroll{width: 100%; height: 450px; overflow-y: auto;}
+#scroll::-webkit-scrollbar{width: 7px;}
+#scroll::-webkit-scrollbar-track{border-radius: 5px; background: #ddd8;}
+#scroll::-webkit-scrollbar-thumb{border-radius: 5px; background: #fff;}
+
+#img-select{width: 50px; height: 50px; cursor: pointer;}
+
+#img-list{width: 70px; height: 500px; background: #3338; border: 2px solid #333c; position: absolute; right: 452px; padding: 20px; display: grid; grid-template-columns: 70px; grid-auto-rows: 70px; overflow: auto; gap: 30px; z-index: 10;}
+#img-list img{width: 70px; height: 70px; cursor: pointer;}
+#img-list::-webkit-scrollbar{width: 7px;}
+#img-list::-webkit-scrollbar-track{border-radius: 5px; background: #ddd8;}
+#img-list::-webkit-scrollbar-thumb{border-radius: 5px; background: #fff;}
