@@ -995,7 +995,10 @@ const particleReset = (reset = false) => {
     particleData.type.push({type: 3, ratio: 10, design: {color: false, stroke: {color: "#aaaaaa", width: 10, cap: "round"}}, mSz: 5, xSz: 20, mSp: 1, xSp: 10, mRtSp: 0.01, xRtSp: 0.06, rtWay: -1, wv: false, mAp: 0.1, xAp: 0.8, direc: "top", start: "random", tran: {speed: 0.01, pos: "all"}, life: {min: 3, max: 6}});
     particleDefault = false;
     particleData.max = 50;
-    if(preset.default === undefined) preset["default"] = btoa(JSON.stringify(particleData));
+    if(preset.default === undefined) {
+      preset["default"] = btoa(JSON.stringify(particleData));
+      preset["none"] = btoa(JSON.stringify({max: 50, type: []}));
+    }
     localStorage.setItem("particle-particleDefault", particleDefault);
     localStorage.setItem("particle-particleData", JSON.stringify(particleData));
     localStorage.setItem("particle-preset", JSON.stringify(preset));
@@ -1138,6 +1141,7 @@ const init = async e => {
     if(name === "") return alert("write down the name of the preset");
     if(name.replace(/[0-9|a-z|A-z|\ ]/g,"") !== "") return alert("only type in English and numbers");
     if(name === "default") return alert("default value is fixed");
+    if(name === "none") return alert("none value is fixed");
     name = name.replace(/\ /g,"-");
     preset[name] = btoa(JSON.stringify(particleData));
     $presetName.value = "";
