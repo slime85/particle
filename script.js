@@ -396,11 +396,13 @@ const modifyRange = left => {
   }
 
   if(data.lock === "min") {
-    value = Math.round(((left - 10) / 130 * (data.max - data.min)) / data.step) * data.step;
+    value = (Math.round(((left - 10) / 130 * (data.max - data.min)) / data.step) * data.step) + data.min;
   }else if(data.lock === "max") {
-    value = Math.round((left / 130 * (data.max - data.min)) / data.step) * data.step;
+    value = (Math.round((left / 130 * (data.max - data.min)) / data.step) * data.step) + data.min;
   }else {
-    value = Math.round((left / 140 * (data.max - data.min)) / data.step) * data.step;
+    console.log("left");
+    console.log(left);
+    value = (Math.round((left / 140 * (data.max - data.min)) / data.step) * data.step) + data.min;
   }
 
   if(value < data.min) value = data.min;
@@ -1173,6 +1175,20 @@ const init = async e => {
       localStorage.setItem("particle-private", JSON.stringify(private));
     }else {
       const type = JSON.parse(atob(data));
+      let image = false;
+      for(let i = 0; i < type.type.length; i++) {
+        let item = type.type[i].type;
+        if(typeof(item) === "string" && item !== "arc") {
+          item = item.split("-")[0] * 1;
+          for(let j = 0; j < imageCount.length; j++) {
+            let jtem = imageCount[j];
+            if(jtem.id === item) {
+              if(private.indexOf(jtem.key) === -1 && jtem.key !== "public") image = true;
+            }
+          }
+        }
+      }
+      if(image) return alert("There's an image that can't be used");
       particleData.max = type.max;
       particleData.type = type.type;
       console.log(type);
@@ -1181,7 +1197,6 @@ const init = async e => {
       particleSet();
       presetList();
     }
-
   })
   
   particleListSet();
