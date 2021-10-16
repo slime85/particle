@@ -4,12 +4,12 @@ const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 const particleList = [];
 const particleData = localStorage.getItem("particle-particleData") === null ? {max: 50, type: []} : JSON.parse(localStorage.getItem("particle-particleData"));
-const preset = localStorage.getItem("particle-preset") === null ? [] : JSON.parse(localStorage.getItem("particle-preset"));
+const preset = localStorage.getItem("particle-preset") === null ? {} : JSON.parse(localStorage.getItem("particle-preset"));
 const pi = Math.PI;
 const page = {x: window.innerWidth, y: window.innerHeight};
 const images = [];
 const imageCount = [{key: "public", id: 0, count: 5}, {key: "test", id: 1, count: 0}, {key: "slime", id: 2, count: 1}];
-const private = localStorage.getItem("particle-private") === null ? ["slime"] : JSON.parse(localStorage.getItem("particle-private"));
+const private = localStorage.getItem("particle-private") === null ? [] : JSON.parse(localStorage.getItem("particle-private"));
 const particleCanvasList = [];
 const particleAdd = document.createElement("canvas");
 const addCtx = particleAdd.getContext("2d");
@@ -81,15 +81,24 @@ const $shapes = document.querySelectorAll(".shape");
 
 const $imgList = document.querySelector("#img-list");
 
-const $inputNumber = document.querySelectorAll("input[type='number']");
-const $inputCheckbox = document.querySelectorAll("input[type='checkbox']");
-const $inputColor = document.querySelectorAll("input[type='color']");
-const $inputText = document.querySelectorAll("input[type='text']");
-const $select = document.querySelectorAll("select");
-const $spans = document.querySelectorAll("span");
+const $inputNumber = document.querySelectorAll("#controller input[type='number']");
+const $inputCheckbox = document.querySelectorAll("#controller input[type='checkbox']");
+const $inputColor = document.querySelectorAll("#controller input[type='color']");
+const $inputText = document.querySelectorAll("#controller input[type='text']");
+const $select = document.querySelectorAll("#controller select");
+const $spans = document.querySelectorAll("#controller span");
 
 const $save = document.querySelector("#save");
 const $delete = document.querySelector("#delete");
+
+const $mainController = document.querySelector("#main-controller");
+const $count = document.querySelector("#count");
+const $preset = document.querySelector("#preset");
+const $presetName = document.querySelector("#preset-name");
+const $savePreset = document.querySelector("#save-preset");
+const $getData = document.querySelector("#get-data");
+const $setData = document.querySelector("#set-data");
+const $viewData = document.querySelector("#view-data");
 
 // 이미지 로드
 const loadImage = (name)=>{
@@ -108,6 +117,12 @@ const loadImage = (name)=>{
 // 프리뷰 타입 변경
 const modifyPreviewType = e => {
   const type = controllParticle.type;
+
+  if(e !== undefined) {
+    console.log(e);
+    if(e.target === $color) $colorText.value = $color.value;
+    if(e.target === $strokeColor) $strokeColorText.value = $strokeColor.value;
+  }
 
   $images.forEach(el => el.style.display = "");
   $polygons.forEach(el => el.style.display = "");
@@ -194,10 +209,8 @@ const modifyPreviewType = e => {
 
   previewParticleList.length = 0;
 
-  if(particleData.type.length > 0) {
-    for(let i = 0; i < particleData.max; i++) {
-      previewParticleList.push(addParticle(true, true));
-    }
+  for(let i = 0; i < particleData.max; i++) {
+    previewParticleList.push(addParticle(true, true));
   }
 }
 
@@ -737,11 +750,15 @@ const toggleController = (idx = -1) => {
       $polygons.forEach(el => el.style.display = "block");
       $shapes.forEach(el => el.style.display = "block");
       shape = true;
+      $imgSelect.src = `image/0-0.png`;
+      $imgSelect.dataset.idx = "0-0";
     }else{
       if(type.type === "arc") {
         $arcOption.selected = true;
         $shapes.forEach(el => el.style.display = "block");
         shape = true;
+        $imgSelect.src = `image/0-0.png`;
+        $imgSelect.dataset.idx = "0-0";
       }else {
         $imgOption.selected = true;
         $imgSelect.src = `image/${type.type}.png`;
@@ -853,11 +870,11 @@ const particleListSet = e => {
   const child = $particleList.querySelectorAll("*");
   child.forEach(el => el.remove());
 
-  // if(particleData.type.length >= 5) {
-  //   $particleList.style.height = "150px";
-  // }else {
-  //   $particleList.style.height = "100px";
-  // }
+  if(particleData.type.length >= 5) {
+    $particleList.style.height = "150px";
+  }else {
+    $particleList.style.height = "100px";
+  }
   for(let i = 0; i < particleData.type.length; i++) {
     const result = {};
     const type = particleData.type[i];
@@ -892,7 +909,12 @@ const particleListSet = e => {
   addCtx.rotate(pi / 2);
   addCtx.fillRect(-25, -5, 50, 10);
 
+  $count.value = particleData.max;
+  $viewData.innerText = btoa(JSON.stringify(particleData));
+
   $particleList.append(particleAdd);
+  localStorage.setItem("particle-particleDefault", particleDefault);
+  localStorage.setItem("particle-particleData", JSON.stringify(particleData));
 }
 
 // 파티클 추가
@@ -913,8 +935,10 @@ const toggleParticleList = e => {
 
     if($particleList.classList.contains("none")) {
       $particleList.classList.remove("none");
+      $mainController.classList.remove("none");
     }else {
       $particleList.classList.add("none");
+      $mainController.classList.add("none");
       $controller.classList.add("none");
       preview.classList.add("none");
       $imgList.classList.add("none");
@@ -961,6 +985,7 @@ const imgListSet = async e => {
   }
 }
 
+// 파티클 초기화
 const particleReset = (reset = false) => {
   if(particleDefault || reset) {
     particleData.type.length = 0;
@@ -970,15 +995,46 @@ const particleReset = (reset = false) => {
     particleData.type.push({type: 3, ratio: 10, design: {color: false, stroke: {color: "#aaaaaa", width: 10, cap: "round"}}, mSz: 5, xSz: 20, mSp: 1, xSp: 10, mRtSp: 0.01, xRtSp: 0.06, rtWay: -1, wv: false, mAp: 0.1, xAp: 0.8, direc: "top", start: "random", tran: {speed: 0.01, pos: "all"}, life: {min: 3, max: 6}});
     particleDefault = false;
     particleData.max = 50;
+    if(preset.default === undefined) preset["default"] = btoa(JSON.stringify(particleData));
     localStorage.setItem("particle-particleDefault", particleDefault);
     localStorage.setItem("particle-particleData", JSON.stringify(particleData));
+    localStorage.setItem("particle-preset", JSON.stringify(preset));
   }
+}
+
+// 헥사코드 6자리로
+const hexToHex = value => {
+  if(value.length === 0) value = "0";
+  if(value.length === 1) value = value[0] + value[0];
+  if(value.length === 2) value = value[0] + value[1] + value[1];
+  if(value.length === 3) value = value[0] + value[0] + value[1] + value[2];
+  if(value.length === 4) value = value[0] + value[1] + value[2] + value[2] + value[3];
+  if(value.length === 5) value = value[0] + value[1] + value[2] + value[3] + value[4] + value[4];
+  return value;
+}
+
+// 프리셋 목록 세팅
+const presetList = e => {
+  const $child = $preset.querySelectorAll("*");
+  $child.forEach(el => el.remove());
+  const $option = document.createElement("option");
+  $option.value = "";
+  $option.innerText = "select preset";
+  $preset.append($option);
+  for(key in preset) {
+    const option = document.createElement("option");
+    option.value = key;
+    option.innerText = key.replace(/\-/g, " ");
+    $preset.append(option);
+  }
+  localStorage.setItem("particle-preset", JSON.stringify(preset));
 }
 
 // 세팅
 const init = async e => {
   await imgListSet();
   particleReset();
+  presetList();
 
   canvas.width = page.x;
   canvas.height = page.y;
@@ -1026,7 +1082,34 @@ const init = async e => {
   $inputColor.forEach(el => el.addEventListener("input", modifyPreviewType));
   $select.forEach(el => el.addEventListener("change", modifyPreviewType));
   $inputText.forEach(el => el.addEventListener("input", e => {
+    if(e.target === $colorText || e.target === $strokeColorText) {
+      let value = e.target.value;
+      value = value.replace(/[^0-9|a-f]/g, "");
+      value = value.slice(0, 6);
+      value = "#" + value;
+      e.target.value = value;
+      
+      value = value.replace(/\#/g, "");
+      value = hexToHex(value);
+      value = "#" + value;
 
+      if(e.target === $colorText) {
+        $color.value = value;
+      }else {
+        $strokeColor.value = value;
+      }
+      modifyPreviewType();
+    }
+  }));
+  $inputText.forEach(el => el.addEventListener("blur", e => {
+    if(e.target === $colorText || e.target === $strokeColorText) {
+      let value = e.target.value;
+      value = value.replace(/[^0-9|a-f]/g, "");
+      value = value.slice(0, 6);
+      value = hexToHex(value);
+      value = "#" + value;
+      e.target.value = value;
+    }
   }));
   $imgSelect.addEventListener("click", e => {
     $imgList.classList.remove("none");
@@ -1044,6 +1127,57 @@ const init = async e => {
     toggleController();
     particleListSet();
     particleSet();
+  })
+  $count.addEventListener("input", e => {
+    particleData.max = $count.value * 1;
+    particleListSet();
+    particleSet();
+  })
+  $savePreset.addEventListener("click", e => {
+    let name = $presetName.value;
+    if(name === "") return alert("write down the name of the preset");
+    if(name.replace(/[0-9|a-z|A-z|\ ]/g,"") !== "") return alert("only type in English and numbers");
+    if(name === "default") return alert("default value is fixed");
+    name = name.replace(/\ /g,"-");
+    preset[name] = btoa(JSON.stringify(particleData));
+    $presetName.value = "";
+    presetList();
+  })
+  $preset.addEventListener("change", e => {
+    if($preset.value !== "") {
+      const get = JSON.parse(atob(preset[$preset.value]));
+      particleData.max = get.max;
+      particleData.type = get.type;
+      toggleController();
+      particleListSet();
+      particleSet();
+      presetList();
+    }
+  })
+  $getData.addEventListener("click", async e => {
+    const data = $setData.value;
+    if(data === "") return alert("input the data");
+    let pri = false;
+    for(let i = 0; i < imageCount.length; i++) {
+      key = imageCount[i].key;
+      if(data === key) pri = true;
+    }
+    if(pri) {
+      private.push(data);
+      await imgListSet();
+      $setData.value = "";
+      localStorage.setItem("particle-private", JSON.stringify(private));
+    }else {
+      const type = JSON.parse(atob(data));
+      particleData.max = type.max;
+      particleData.type = type.type;
+      console.log(type);
+      toggleController();
+      particleListSet();
+      particleSet();
+      presetList();
+    }
+
   })
   
   particleListSet();

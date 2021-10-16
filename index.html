@@ -73,6 +73,17 @@
     <div id="save">apply</div>
     <div id="delete" class="none">delete</div>
   </div>
+  <div id="main-controller" class="none">
+    <p>particle count : <input type="number" id="count" min="0"></p>
+    <p>preset : <select id="preset">
+      <option value="">select preset</option>
+    </select></p>
+    <div>save preset : <input type="text" id="preset-name"><button id="save-preset" class="btn">save</button></div>
+    <div>get particle data : <button id="get-data" class="btn">apply</button></div>
+    <textarea id="set-data" cols="50" rows="5"></textarea>
+    <p>current particle data : </p>
+    <textarea id="view-data" cols="50" rows="5" readonly></textarea>
+  </div>
   <div id="img-list" class="none"></div>
   <canvas id="preview" class="none"></canvas>
   <script src="script.js"></script>
