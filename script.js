@@ -127,6 +127,7 @@ const modifyPreviewType = e => {
   $images.forEach(el => el.style.display = "");
   $polygons.forEach(el => el.style.display = "");
   $shapes.forEach(el => el.style.display = "");
+  $imgList.classList.add("none");
 
   type.type = $type.value;
 
